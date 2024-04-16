@@ -5,6 +5,8 @@ import com.globant.proyecto8springstarterproject.services.UserService;
 import io.micrometer.core.annotation.Timed;
 import io.micrometer.observation.Observation;
 import io.micrometer.observation.ObservationRegistry;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -48,9 +50,17 @@ public class UserController {
     public ResponseEntity<User> getUserByUsername(@PathVariable("username")String username){
         return new ResponseEntity<>(service.getUserByUsername(username), HttpStatus.OK);
     }
+    @Operation(summary = "For authentication", description = "bar")
+    @ApiResponse(responseCode = "200", description = "The record was found")
+    @ApiResponse(responseCode = "404", description = "The record wasn't found")
     @PostMapping
     public ResponseEntity<User> authenticate(@RequestBody User user){
         return new ResponseEntity<>(service.getUserByUsernameAndPassword(user.getUsername(), user.getPassword()),
                 HttpStatus.OK);
+    }
+    @DeleteMapping("/{username}")
+    public ResponseEntity<Void> deleteUser(@PathVariable("username") String username){
+        service.deleteUserByUsername(username);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

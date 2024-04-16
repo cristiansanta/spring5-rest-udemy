@@ -1,7 +1,9 @@
 package com.globant.proyecto8springstarterproject.services;
 
 import com.globant.proyecto8springstarterproject.entities.Role;
+import com.globant.proyecto8springstarterproject.entities.User;
 import com.globant.proyecto8springstarterproject.repositories.RoleRepository;
+import com.globant.proyecto8springstarterproject.repositories.UserInRoleRespository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,11 @@ import java.util.Optional;
 public class RoleService {
     @Autowired
     private RoleRepository repository;
+    @Autowired
+    private UserInRoleRespository userInRoleRespository;
+    public List<User> getUsersByRole(String roleName){
+            return userInRoleRespository.findUsersByRoleName(roleName);
+    }
     public List<Role> getRoles(){
         return repository.findAll();
     }
